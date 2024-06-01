@@ -71,6 +71,11 @@ jobs:
           }
           echo "filename=$filename" >> $env:GITHUB_OUTPUT
           Compress-Archive out/install/x86-multi-config/* out/publish/$filename
+          $fileToHash = Get-Content -Path out/publish/$filename
+          $hasher = [System.Security.Cryptography.HashAlgorithm]::Create('sha256')
+          $hashObject = $hasher.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($fileToHash))
+          $hash = [System.BitConverter]::ToString($hashObject)
+          $hash.Replace('-', '')  
           $hash = Get-FileHash -Path out/publish/$filename -Algorithm SHA256 | Select-Object Hash
           Set-Content -Path out/publish/$filename.sha256 -Value $hash
       - name: Archive ZIP
