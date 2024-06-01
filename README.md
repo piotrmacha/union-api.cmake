@@ -2,9 +2,9 @@
 
 This project provides CMake Targets and premade builds for [Union API](https://gitlab.com/union-framework/union-api) and
 [Gothic API](https://gitlab.com/union-framework/gothic-api) libraries in all common build type configurations 
-(Debug, Release, RelWithDebInfo, MinSizeRel) and with both static and shared library. 
+(Debug, Release, RelWithDebInfo, MinSizeRel) and with both static and shared linking. 
 Union API is a framework for creating native plugins for Gothic games based on ZenGin 
-(Gothic 1, Gothic Sequel, Gothic 2, Gothic 2: Night of the Raven).
+(Gothic 1, Gothic Sequel, Gothic 2, Gothic 2: Night of the Raven) by hooking into the game's executable memory.
 
 ## Toolchains
 
@@ -148,7 +148,7 @@ WIN32 _CONSOLE UNION_API_DLL NDEBUG
 
 # Debug
 WIN32 _CONSOLE UNION_API_DLL _DEBUG
-``
+```
 
 #### Gothic API 
 
