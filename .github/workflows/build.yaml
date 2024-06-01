@@ -34,24 +34,24 @@ jobs:
           MSVC_VERSION: ${{ matrix.toolkit }}
         run: |
           $TOOLKIT=""
-          echo $env:MSVC_VERSION
+          echo "MSVC_VERSION = $env:MSVC_VERSION"
           if ($env:MSVC_VERSION -match "^14\.2[0-9]$") { $TOOLKIT="v142" }
           if ($env:MSVC_VERSION -match "^14\.[34][0-9]$") { $TOOLKIT="v143" }
-          echo $TOOLKIT
-          echo "TOOLKIT=$TOOLKIT" >> $env:GITHUB_OUTPUT
-          echo $(git submodule status) >> out/install/x86-multi-config/submodules.ref.txt
+          echo "TOOLKIT = $TOOLKIT"
+          $submodules = echo $(git submodule status)
+          Set-Content -Path out/install/x86-multi-config/submodules.ref.txt -Value $submodules
           $unionApiRef = git submodule status union-api | %{($_ -split "\s+")[1]}
           $gothicApiRef = git submodule status gothic-api | %{($_ -split "\s+")[1]}
-          echo $unionApiRef >> out/install/x86-multi-config/union-api.ref.txt
-          echo $gothicApiRef >> out/install/x86-multi-config/gothic-api.ref.txt
+          Set-Content -Path out/install/x86-multi-config/union-api.ref.txt -Value $unionApiRef
+          Set-Content -Path out/install/x86-multi-config/gothic-api.ref.txt -Value $gothicApiRef
           $date = Get-Date -Format 'yyyy.MM.ddTHH.mm'
-          echo $date >> out/install/x86-multi-config/build-time.txt
+          Set-Content -Path out/install/x86-multi-config/build-time.txt -Value $date 
           $os = $env:OS
           $filename = "UnionAPI-$TOOLKIT-$os-$date.zip"
-          echo $filename >> $env:GITHUB_OUTPUT
+          echo "filename=$filename" >> $env:GITHUB_OUTPUT
           Compress-Archive out/install/x86-multi-config/* out/install/x86-multi-config/$filename
           $hash = Get-FileHash -Path out/install/x86-multi-config/$filename -Algorithm SHA256
-          echo $hash >> out/install/x86-multi-config/$filename.sha256
+          Set-Content -Path out/install/x86-multi-config/$filename.sha256 -Value $hash
       - name: Archive ZIP
         uses: actions/upload-artifact@v4
         with:
