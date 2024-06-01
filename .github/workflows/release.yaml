@@ -55,6 +55,16 @@ jobs:
           $notes = GenerateReleaseNotes -Build UnionAPI-v142-windows-2022 -Notes ""
           $notes = GenerateReleaseNotes -Build UnionAPI-v143-windows-2022 -Notes $notes
           Set-Content -Path release-notes.md -Value $notes
+      - name: Create tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ inputs.version }}',
+              sha: context.sha
+            })
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
@@ -64,6 +74,7 @@ jobs:
           fail_on_unmatched_files: true
           draft: false
           make_latest: true
+          tag_name: ${{ inputs.version }}
           name: ${{ inputs.version }}}
           files: |
             UnionAPI-v142-windows-2022-${{ inputs.version }}.zip
