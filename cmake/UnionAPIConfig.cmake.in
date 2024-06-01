@@ -1,0 +1,13 @@
+@PACKAGE_INIT@
+
+file(GLOB UNION_TARGETS
+    "${CMAKE_CURRENT_LIST_DIR}/UnionAPITargets-Debug.cmake"
+    "${CMAKE_CURRENT_LIST_DIR}/UnionAPITargets-Release.cmake"
+    "${CMAKE_CURRENT_LIST_DIR}/UnionAPITargets-MinSizeRel.cmake"
+    "${CMAKE_CURRENT_LIST_DIR}/UnionAPITargets-RelWithDebInfo.cmake")
+include(${CMAKE_CURRENT_LIST_DIR}/GothicAPITargets.cmake)
+foreach(TARGET IN ITEMS ${UNION_TARGET})
+    include(${TARGET})
+endforeach()
+
+check_required_components("@PROJECT_NAME@")

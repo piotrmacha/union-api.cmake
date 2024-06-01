@@ -1,0 +1,8 @@
+[submodule "union-api"]
+	path = union-api
+	url = https://gitlab.com/union-framework/union-api.git
+	branch = main
+[submodule "gothic-api"]
+	path = gothic-api
+	url = https://gitlab.com/union-framework/gothic-api.git
+	branch = main
