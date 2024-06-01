@@ -1,0 +1,31 @@
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-2019, windows-2022]
+        toolkit: [14.29, 14.39]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: amd64_x86
+          toolset: ${{ matrix.toolkit }}
+          export-path-to-vcvarsall: VCVARSALL
+      - name: Setup CMake Ninja Multi-Config
+        run: cmake -G "Ninja Multi-Config" --preset x86-multi-config -S . -B out/build/x86-multi-config
+      - name: CMake Build
+        run: cmake --build out/build/x86-multi-config --target all -j 16
+      - name: CMake Install
+        run: cmake --build out/build/x86-multi-config --target install
+      - name: Archive
+        run: actions/upload-artifact@v4
+        with:
+          name: union-api-msvc${{ matrix.os }}-${{ matrix.os }}
+          path: out/install/x86-multi-config/*
