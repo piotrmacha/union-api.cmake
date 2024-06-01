@@ -8,7 +8,7 @@ Union API is a framework for creating native plugins for Gothic games based on Z
 
 ## Toolchains
 
-Union API for Gothic works only as an x86 target built with MSVC, because the original game is 32-bit MSVC compilation.
+Union API for Gothic works only as a x86 target built with MSVC, because the original game is a 32-bit MSVC artifact.
 At this moment we suport toolsets:
 * v142 (MSVC 14.20-14.29) - built with MSVC 14.29
 * v143 (MSVC 14.30-14.49) - built with MSVC 14.39
