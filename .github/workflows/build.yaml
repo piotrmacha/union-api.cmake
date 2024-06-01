@@ -2,6 +2,13 @@ name: Build
 
 on:
   push:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        description: 'Build version'
+        required: true
+        default: ''
   workflow_dispatch:
     inputs:
       version:
