@@ -30,7 +30,7 @@ jobs:
       - name: Convert version to toolkit
         id: convert-version
         env:
-          OS: {{ matrix.os }}
+          OS: ${{ matrix.os }}
           MSVC_VERSION: ${{ matrix.toolit }}
         run: |
           $TOOLKIT=""
