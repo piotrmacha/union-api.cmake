@@ -34,7 +34,7 @@ jobs:
               [string]$Build,
               [string]$Notes
             )
-            Uncompress-Archive -Path $Build-${{ inputs.version }}.zip -DestinationPath $Build-${{ inputs.version }}
+            Expand-Archive -Path $Build-${{ inputs.version }}.zip -DestinationPath $Build-${{ inputs.version }}
             $Notes += "# UnionAPI (MSVC v142)`n`n"
             $sha256 = Get-Content -Path $Build-${{ inputs.version }}.zip.sha256
             $Notes += "Archive SHA256: $sha256`n`n"

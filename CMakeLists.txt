@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 project(union-api VERSION 1.0.0 LANGUAGES CXX)
 
-
 option(BUILD_UNION_API_STATIC "Build union-api as a static library"        ON)
 option(BUILD_UNION_API_SHARED "Build union-api as a shared library"        ON)
 option(BUILD_GOTHIC_API       "Build gothic-api as an interface target"    ON)
