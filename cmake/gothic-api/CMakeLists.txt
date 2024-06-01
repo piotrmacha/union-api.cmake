@@ -3,7 +3,7 @@ if(${BUILD_GOTHIC_API})
     target_include_directories(GothicAPI
             INTERFACE $<BUILD_INTERFACE:${GOTHIC_API_SRC_DIR}>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-            $<BUILD_INTERFACE:${GOTHIC_API_SRC_DIR}ZZenGin/Gothic_UserAPI>
+            $<BUILD_INTERFACE:${GOTHIC_API_SRC_DIR}ZenGin/Gothic_UserAPI>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}include/ZenGin/Gothic_UserAPI>)
     target_link_directories(GothicAPI
             INTERFACE $<BUILD_INTERFACE:${GOTHIC_API_SRC_DIR}>
