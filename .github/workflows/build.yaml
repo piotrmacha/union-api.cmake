@@ -28,17 +28,34 @@ jobs:
       - name: CMake Install
         run: cmake --build out/build/x86-multi-config --target install
       - name: Convert version to toolkit
+        id: convert-version
         env:
+          OS: {{ matrix.os }}
           MSVC_VERSION: ${{ matrix.toolit }}
         run: |
-          if ($env:MSVC_VERSION -match "^14.2[0-9]$") {
-            echo "TOOLKIT=v142" >> $env:GITHUB_OUTPUT
-          }
-          if ($env:MSVC_VERSION -match "^14.[34][0-9]$") {
-            echo "TOOLKIT=v143" >> $env:GITHUB_OUTPUT
-          }
-      - name: Archive
+          $TOOLKIT=""
+          if ($env:MSVC_VERSION -match "^14.2[0-9]$") { $TOOLKIT="v142" }
+          if ($env:MSVC_VERSION -match "^14.[34][0-9]$") { $TOOLKIT="v143" }
+          echo "TOOLKIT=$TOOLKIT" >> $env:GITHUB_OUTPUT
+          echo $(git submodule status) >> out/install/x86-multi-config/submodules.ref.txt
+          $unionApiRef = git submodule status union-api | %{($_ -split "\s+")[1]}
+          $gothicApiRef = git submodule status gothic-api | %{($_ -split "\s+")[1]}
+          echo $unionApiRef >> out/install/x86-multi-config/union-api.ref.txt
+          echo $gothicApiRef >> out/install/x86-multi-config/gothic-api.ref.txt
+          $date = Get-Date -Format 'yyyy.MM.ddTHH.mm'
+          echo $date >> out/install/x86-multi-config/build-time.txt
+          $filename = UnionAPI-$TOOLKIT-$env:OS-$date.zip
+          echo $filename >> $env:GITHUB_OUTPUT
+          Compress-Archive out/install/x86-multi-config/* out/install/x86-multi-config/$filename
+          $hash = Get-FileHash -Path $filename -Algorithm SHA256
+          echo $hash >> out/install/x86-multi-config/$filename.sha256
+      - name: Archive ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: UnionAPI-${{ env.TOOLKIT }}-${{ matrix.os }}.zip
-          path: out/install/x86-multi-config/*
+          name: ${{ steps.convert-version.outputs.filename }}
+          path: out/install/x86-multi-config/${{ steps.convert-version.outputs.filename }}
+      - name: Archive SHA256
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.convert-version.outputs.filename }}.sha256
+          path: out/install/x86-multi-config/${{ steps.convert-version.outputs.filename }}.sha256
