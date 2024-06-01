@@ -6,8 +6,8 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-2022, windows-latest]
-        toolkit: [14.29, 14.39, 14.40]
+        os: [windows-2022]
+        toolkit: [14.29, 14.39]
         include:
           - os: windows-2019
             toolkit: 14.29
