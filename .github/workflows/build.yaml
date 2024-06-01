@@ -6,8 +6,8 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-2022]
-        toolkit: [14.29, 14.39]
+        os: [ windows-2022 ]
+        toolkit: [ 14.29, 14.39 ]
         include:
           - os: windows-2019
             toolkit: 14.29
@@ -27,8 +27,18 @@ jobs:
         run: cmake --build out/build/x86-multi-config --target all -j 16
       - name: CMake Install
         run: cmake --build out/build/x86-multi-config --target install
+      - name: Convert version to toolkit
+        env:
+          MSVC_VERSION: ${{ matrix.toolit }}
+        run: |
+          if ($env:MSVC_VERSION -match "^14.2[0-9]$") {
+            echo "TOOLKIT=v142" >> $env:GITHUB_OUTPUT
+          }
+          if ($env:MSVC_VERSION -match "^14.[34][0-9]$") {
+            echo "TOOLKIT=v143" >> $env:GITHUB_OUTPUT
+          }
       - name: Archive
         uses: actions/upload-artifact@v4
         with:
-          name: union-api-msvc${{ matrix.os }}-${{ matrix.os }}
+          name: UnionAPI-${{ env.TOOLKIT }}-${{ matrix.os }}.zip
           path: out/install/x86-multi-config/*
