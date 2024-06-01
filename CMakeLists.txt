@@ -7,7 +7,7 @@ option(BUILD_GOTHIC_API       "Build gothic-api as an interface target"    ON)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-set(UNION_API_SRC_DIR  "${CMAKE_SOURCE_DIR}/union-api"  CACHE STRING "The directory containing Union API source")
-set(GOTHIC_API_SRC_DIR "${CMAKE_SOURCE_DIR}/gothic-api" CACHE STRING "The directory containing Gothic API source")
+set(UNION_API_SRC_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/union-api"  CACHE STRING "The directory containing Union API source")
+set(GOTHIC_API_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/gothic-api" CACHE STRING "The directory containing Gothic API source")
 
 add_subdirectory(cmake)
