@@ -25,7 +25,7 @@ jobs:
       - name: CMake Install
         run: cmake --build out/build/x86-multi-config --target install
       - name: Archive
-        run: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: union-api-msvc${{ matrix.os }}-${{ matrix.os }}
           path: out/install/x86-multi-config/*
