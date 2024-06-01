@@ -55,6 +55,10 @@ jobs:
           $notes = GenerateReleaseNotes -Build UnionAPI-v142-windows-2022 -Notes ""
           $notes = GenerateReleaseNotes -Build UnionAPI-v143-windows-2022 -Notes $notes
           Set-Content -Path release-notes.md -Value $notes
+          Copy-Item UnionAPI-v142-windows-2022-${{ inputs.version }}.zip UnionAPI-v142-windows-2022.zip
+          Copy-Item UnionAPI-v142-windows-2022-${{ inputs.version }}.zip.sha256 UnionAPI-v142-windows-2022.zip.sha256
+          Copy-Item UnionAPI-v143-windows-2022-${{ inputs.version }}.zip UnionAPI-v143-windows-2022.zip
+          Copy-Item UnionAPI-v143-windows-2022-${{ inputs.version }}.zip.sha256 UnionAPI-v143-windows-2022.zip.sha256
       - name: Create tag
         uses: actions/github-script@v5
         with:
@@ -77,9 +81,9 @@ jobs:
           tag_name: ${{ inputs.version }}
           name: ${{ inputs.version }}
           files: |
-            UnionAPI-v142-windows-2022-${{ inputs.version }}.zip
-            UnionAPI-v142-windows-2022-${{ inputs.version }}.zip.sha256
-            UnionAPI-v143-windows-2022-${{ inputs.version }}.zip
-            UnionAPI-v143-windows-2022-${{ inputs.version }}.zip.sha256
+            UnionAPI-v142-windows-2022.zip
+            UnionAPI-v142-windows-2022.zip.sha256
+            UnionAPI-v143-windows-2022.zip
+            UnionAPI-v143-windows-2022.zip.sha256
           
           
