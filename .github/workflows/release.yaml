@@ -1,0 +1,74 @@
+name: Release
+permissions: write-all
+
+on:
+  workflow_dispatch:
+    inputs:
+        version:
+            description: 'Release version'
+            required: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      version: ${{ inputs.version }}
+  publish:
+    runs-on: windows-2022
+    needs: build
+    steps:
+      - name: Download artifact (v142)
+        uses: actions/download-artifact@v4
+        with:
+          name: UnionAPI-v142-windows-2022-${{ inputs.version }}.zip
+          path: .
+      - name: Download artifact (v143)
+        uses: actions/download-artifact@v4
+        with:
+          name: UnionAPI-v143-windows-2022-${{ inputs.version }}.zip
+          path: .
+      - name: Prepare Release Files
+        run: |
+          function GenerateReleaseNotes {
+            param (
+              [string]$Build,
+              [string]$Notes
+            )
+            Uncompress-Archive -Path $Build-${{ inputs.version }}.zip -DestinationPath $Build-${{ inputs.version }}
+            $Notes += "# UnionAPI (MSVC v142)`n`n"
+            $sha256 = Get-Content -Path $Build-${{ inputs.version }}.zip.sha256
+            $Notes += "Archive SHA256: $sha256`n`n"
+            $buildTime = Get-Content -Path $Build-${{ inputs.version }}/build-time.txt
+            $Notes += "Build Time: $buildTime`n`n"
+            $unionApiRef = Get-Content -Path $Build-${{ inputs.version }}/union-api.ref.txt
+            $Notes += "Union API: [$unionApiRef](https://gitlab.com/union-framework/union-api/-/tree/$unionApiRef)`n`n"
+            $gothicApiRef = Get-Content -Path $Build-${{ inputs.version }}/gothic-api.ref.txt
+            $Notes += "Union API: [$gothicApiRef](https://gitlab.com/union-framework/gohtic-api/-/tree/$gothicApiRef)`n`n"
+            $configurations = Get-ChildItem -Path $Build-${{ inputs.version }}/bin -Directory | Select-Object -ExpandProperty Name
+            $Notes += "Configurations:`n`n"
+            foreach ($configuration in $configurations) {
+              $Notes += "- $configuration`n"
+            }
+            $Notes += "`n"
+            return $Notes;
+          }
+          $notes = GenerateReleaseNotes -Build UnionAPI-v142-windows-2022 -Notes ""
+          $notes = GenerateReleaseNotes -Build UnionAPI-v143-windows-2022 -Notes $notes
+          Set-Content -Path release-notes.md -Value $notes
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ github.token }}
+          generate_release_notes: false
+          body_path: release-notes.md
+          fail_on_unmatched_files: true
+          draft: false
+          make_latest: true
+          name: ${{ inputs.version }}}
+          files: |
+            UnionAPI-v142-windows-2022-${{ inputs.version }}.zip
+            UnionAPI-v142-windows-2022-${{ inputs.version }}.zip.sha256
+            UnionAPI-v143-windows-2022-${{ inputs.version }}.zip
+            UnionAPI-v143-windows-2022-${{ inputs.version }}.zip.sha256
+          
+          

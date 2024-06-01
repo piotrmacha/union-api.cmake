@@ -1,6 +1,13 @@
+name: Build
+
 on:
   push:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Build version'
+        required: true
+        default: ''
 
 jobs:
   build:
@@ -32,6 +39,7 @@ jobs:
         env:
           OS: ${{ matrix.os }}
           MSVC_VERSION: ${{ matrix.toolkit }}
+          VERSION: ${{ inputs.version }}
         run: |
           $TOOLKIT=""
           echo "MSVC_VERSION = $env:MSVC_VERSION"
@@ -48,7 +56,12 @@ jobs:
           $date = Get-Date -Format 'yyyy.MM.ddTHH.mm'
           Set-Content -Path out/install/x86-multi-config/build-time.txt -Value $date 
           $os = $env:OS
-          $filename = "UnionAPI-$TOOLKIT-$os-$date.zip"
+          $version = $env:VERSION
+          if ($version -eq '') {
+            $filename = "UnionAPI-$TOOLKIT-$os-$date.zip"
+          } else {
+            $filename = "UnionAPI-$TOOLKIT-$os-$version.zip"
+          }
           echo "filename=$filename" >> $env:GITHUB_OUTPUT
           Compress-Archive out/install/x86-multi-config/* out/publish/$filename
           $hash = Get-FileHash -Path out/publish/$filename -Algorithm SHA256
