@@ -75,7 +75,7 @@ jobs:
           draft: false
           make_latest: true
           tag_name: ${{ inputs.version }}
-          name: ${{ inputs.version }}}
+          name: ${{ inputs.version }}
           files: |
             UnionAPI-v142-windows-2022-${{ inputs.version }}.zip
             UnionAPI-v142-windows-2022-${{ inputs.version }}.zip.sha256

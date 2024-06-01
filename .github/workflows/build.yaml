@@ -71,7 +71,7 @@ jobs:
           }
           echo "filename=$filename" >> $env:GITHUB_OUTPUT
           Compress-Archive out/install/x86-multi-config/* out/publish/$filename
-          $hash = Get-FileHash -Path out/publish/$filename -Algorithm SHA256
+          $hash = Get-FileHash -Path out/publish/$filename -Algorithm SHA256 | Select-Object Hash
           Set-Content -Path out/publish/$filename.sha256 -Value $hash
       - name: Archive ZIP
         uses: actions/upload-artifact@v4
