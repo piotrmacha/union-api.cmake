@@ -6,8 +6,11 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-2019, windows-2022]
-        toolkit: [14.29, 14.39]
+        os: [windows-2022, windows-latest]
+        toolkit: [14.29, 14.39, 14.40]
+        include:
+          - os: windows-2019
+            toolkit: 14.29
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
