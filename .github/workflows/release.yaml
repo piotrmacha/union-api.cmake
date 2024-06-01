@@ -43,7 +43,7 @@ jobs:
             $unionApiRef = Get-Content -Path $Build-${{ inputs.version }}/union-api.ref.txt
             $Notes += "Union API: [$unionApiRef](https://gitlab.com/union-framework/union-api/-/tree/$unionApiRef)`n`n"
             $gothicApiRef = Get-Content -Path $Build-${{ inputs.version }}/gothic-api.ref.txt
-            $Notes += "Union API: [$gothicApiRef](https://gitlab.com/union-framework/gohtic-api/-/tree/$gothicApiRef)`n`n"
+            $Notes += "Gothic API: [$gothicApiRef](https://gitlab.com/union-framework/gohtic-api/-/tree/$gothicApiRef)`n`n"
             $configurations = Get-ChildItem -Path $Build-${{ inputs.version }}/bin -Directory | Select-Object -ExpandProperty Name
             $Notes += "Configurations:`n`n"
             foreach ($configuration in $configurations) {
