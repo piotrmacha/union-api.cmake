@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    uses: ./build.yml
+    uses: ./.github/workflows/build.yaml
     with:
       version: ${{ inputs.version }}
   publish:
